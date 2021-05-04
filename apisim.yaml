@@ -13,14 +13,15 @@ kvStores:
 #======================================================================
 # This simlet matches any and all requests. API Simulator will execute 
 # this simlet if it cannot match any other simlet from the simulation.
-# The response will always be the same stubbed body and the default
-# "200 OK" HTTP status.
+# The response will always be the same stubbed body and 404 (Not Found)
+# HTTP status.
 #======================================================================
-simlet: hello-world
+simlet: match-not-found
 
 response:
   from: stub
-  body: "Hello, World!"
+  status: 404
+  body: "Hmm...the request didn't match a simlet. Please check the request and try again"
 ---
 #======================================================================
 # Using URI path parameter from the request to 
@@ -129,7 +130,9 @@ responses:
 
     # otherwise
   - from: template
-    status: 200  
+    status: 200
+    headers:
+      - "Content-Type: application/json"
     body: "${Customer}"
 ---
 simlet: create-customer
@@ -308,7 +311,9 @@ Customers:
 
 response:
   from: template
-  status: 200  
+  status: 200
+  headers:
+    - "Content-Type: application/json"
   body: `
 { "customers": [
 <%
